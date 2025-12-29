@@ -12,9 +12,9 @@ WITH base AS (
         info.genres AS video_genre,
         info.comments AS amount_comments,
         info.channel_subscribers AS amount_channel_subscribers
-    FROM sandbox_frost.justin_van_gemeren_vir.watch_history history
-    LEFT JOIN sandbox_frost.justin_van_gemeren_vir.info info on history.title_url = info.url
-), date_time_fields AS (
+    FROM projects.youtube.watch_history history
+    LEFT JOIN projects.youtube.info info on history.title_url = info.url
+)
     SELECT
         *,
         EXTRACT(YEAR FROM begin_timestamp_watched) AS year_watched,
@@ -31,11 +31,6 @@ WITH base AS (
         TO_CHAR(begin_timestamp_watched,'IYYY"-"IW') AS year_week_label,
         EXTRACT(HOUR FROM begin_timestamp_watched) AS hour_of_day_watched
     FROM base
-)
-SELECT
-    hour_of_day_watched, SUM(video_duration)
-FROM date_time_fields
-GROUP BY hour_of_day_watched
-ORDER BY SUM(video_duration) DESC
+
 
 
